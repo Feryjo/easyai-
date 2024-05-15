@@ -1,19 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Fetch Data from API</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fetch Image URL from API</title>
+
 </head>
 <body>
-    <h1>Data from API</h1>
-    <p id="data"></p>
+<div class="image-container">
+  <img id="image" src="" alt="Fetched Image">
+</div>
 
-    <script>
-        fetch('https://sheetdb.io/api/v1/tyf6zlklqzbhb')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('data').innerText = data.url;
-            })
-            .catch(error => console.error('Error:', error));
-    </script>
+<script>
+  // Replace with the actual API endpoint
+  const apiUrl = 'https://sheetdb.io/api/v1/tyf6zlklqzbhb';
+
+  // Function to fetch data from the API
+  function fetchData() {
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Assuming the API returns an array of objects with a 'url' property
+        if (data.length > 0 && data[0].url) {
+          const imageUrl = data[0].url;
+          displayImage(imageUrl);
+        } else {
+          console.error('No image URL found in the API response');
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }
+
+  // Function to display the image
+  function displayImage(imageUrl) {
+    const imageElement = document.getElementById('image');
+    imageElement.src = imageUrl;
+  }
+
+  // Fetch data when the page loads
+  window.onload = fetchData;
+</script>
 </body>
 </html>
